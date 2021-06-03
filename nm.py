@@ -9,36 +9,34 @@ import seaborn as sns
 #Remove Warnings
 st.balloons()
 st.set_option('deprecation.showPyplotGlobalUse', False)
-st.title("Tips_Dataset")
-
+from PIL import Image 
+img = Image.open("download.jpeg")
+st.image(img,width=300)
+st.title("World Happiness Report 2021")
 #import dataset
-df = pd.read_csv('tips.csv')
+df = pd.read_csv('world-happiness-report-2021.csv')
 #First thirty rows
-tips = df.head(10)
+data = df.head(10)
 #Display the table
-st.table(tips)
-st.header("Visualisation Using Seaborn")
-#bar plot
-st.subheader("Bar Plot")
-tips.plot(kind='bar')
-st.pyplot()
+st.table(data)
+
+#data=pd.read_csv('world-happiness-report-2021.csv')
+total_rows=df.shape[0]
+#1. the total number of countries in dataset
+st.markdown("Total number of countries in dataset:  " + str(total_rows))
+st.header("Position of India in the list")
+grp1=df.groupby('Country name')
+grp1_data=grp1.get_group('India')
+st.table(grp1_data)
+st.header("Countries with more Social Support")
+grp1=data.groupby('Social support')
+#grp1_data=grp1.get_group('India')
+st.table(grp1.max())
 #Displot
-st.subheader("Displot")
-sns.displot(tips['total_bill'])
+st.subheader("Displot showing Social Support")
+sns.distplot(df['Social support'])
 st.pyplot()
-#joinplot
-st.subheader("JointPlot")
-sns.jointplot(x='total_bill',y='tip',data=tips,kind='scatter')
-st.pyplot()
-#pairplot
-st.subheader("Pairplot")
-sns.pairplot(tips,hue='sex',palette='rainbow')
-st.pyplot()
-#Rugplot
-st.subheader("Rugplot")
-sns.rugplot(tips['tip'])
-st.pyplot()
-#Correation
-st.subheader("Heatmap")
-sns.heatmap(tips.corr(),cmap='coolwarm',annot=True)
+#barplot
+st.subheader("Barplot showing Health Life Expectancy")
+sns.barplot(x='Country name',y='Explained by: Healthy life expectancy',data=df)
 st.pyplot()
